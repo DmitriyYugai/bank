@@ -18,7 +18,26 @@
                 const divs = document.querySelectorAll('.form-group');
                 if (e.target.value == 3) {
                     divs[4].innerHTML = '<label for="exchNumber">Номер счёта</label>' +
-                        '<input type="text" class="form-control" id="exchNumber" name="exchNumber" placeholder="Введите номер счёта">';
+                        '<select class="form-control" id="exchNumber" name="exchNumber"></select>';
+                    fetch(`http://localhost:8080/account/json`, {
+                        method: 'GET'
+                    })
+                    .then(response => {
+                        return response.json();
+                    })
+                    .then(data => {
+                        const select = document.querySelector('#exchNumber');
+                        const search = new URLSearchParams(document.location.search);
+                        for (let account of data) {
+                            if (search.get('number') == account.number) {
+                                continue;
+                            }
+                            const option = document.createElement('option');
+                            option.value = account.number;
+                            option.innerText = account.number;
+                            select.append(option);
+                        }
+                    })
                 } else {
                     divs[4].innerHTML = '<input type="hidden" class="form-control" id="exchNumber" name="exchNumber" value="${number}">';
                 }

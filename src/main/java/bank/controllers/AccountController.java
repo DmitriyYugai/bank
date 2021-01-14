@@ -3,6 +3,8 @@ package bank.controllers;
 import bank.models.Account;
 import bank.services.AccountService;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +30,12 @@ public class AccountController {
             model.addAttribute("errorMessage", "Счёт с указанным номером уже существует в системе");
         }
         return "accounts";
+    }
+
+    @GetMapping("/account/json")
+    public ResponseEntity<String> getAccountsJson() {
+        String rsl = accountService.findAllAccounts();
+        return new ResponseEntity<>(rsl, HttpStatus.OK);
     }
 
     @PostMapping("/account")

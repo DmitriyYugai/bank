@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional
+@EnableTransactionManagement
 public class TransactionService {
     private final TransactionDao transactionDao;
     private final AccountDao accountDao;
@@ -39,6 +39,7 @@ public class TransactionService {
         return gson.toJson(transactions);
     }
 
+    @Transactional
     public void doTransaction(Transaction transaction) throws NotEnoughMoneyException, NoSuchAccountException {
         if (transaction.getType().getId() == 1) {
             topUp(transaction.getNumber(), transaction.getSum());
